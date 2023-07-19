@@ -1,3 +1,5 @@
+import { fetchData } from "./fetchData";
+
 interface IMovie {
   poster_path: string,
   original_title: string,
@@ -25,8 +27,42 @@ const IMG_HOST:string = 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2';
  realiseDate.className=className
  return realiseDate;
  }
-// Popular-----------------------------------------------------------------------------------------------------------------
+// Popular
 
+const menuPopular = document.getElementById('popular') as HTMLLinkElement;
+menuPopular.addEventListener('click', async function () {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  urlParams.set('mode', 'popular');
+  urlParams.set('page', '1');
+  removeMoviesFromLocalStorage();
+
+  window.location.search = urlParams.toString();
+})
+
+const menuUpcoming = document.getElementById('upcoming') as HTMLLinkElement;
+menuUpcoming.addEventListener('click', async function () {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  urlParams.set('mode', 'upcoming');
+  urlParams.set('page', '1');
+  removeMoviesFromLocalStorage();
+
+  window.location.search = urlParams.toString();
+  console.log(window.location.search);
+});
+
+const menuTop = document.getElementById('top') as HTMLLinkElement;
+menuTop.addEventListener('click', async function () {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  urlParams.set('mode', 'top');
+  urlParams.set('page', '1');
+  removeMoviesFromLocalStorage();
+
+  window.location.search = urlParams.toString();
+  console.log(window.location.search);
+});
 // async function getPopularMovie<T>(): Promise<T[]> {
 //     const options = {
 //       method: 'GET',
@@ -281,6 +317,14 @@ function saveMovieIdToLocalStorage(movieId: string): void {
   localStorage.setItem('favMovieIds', JSON.stringify(storedMovieIds));
 }
 
+function saveMoviesToLocalStorage(movies: IMovie[]): void {
+  localStorage.setItem('movies', JSON.stringify(movies));
+}
+
+function removeMoviesFromLocalStorage(): void {
+  localStorage.removeItem('movies');
+}
+
 function removeMovieIdFromLocalStorage(movieId: string): void {
   let storedMovieIds: string[] = JSON.parse(localStorage.getItem('favMovieIds') || '[]');
 
@@ -289,28 +333,7 @@ function removeMovieIdFromLocalStorage(movieId: string): void {
 }
 
 
-async function fetchData<T>(endpoint: string, pageNumber: number): Promise<T[]> {
-  const HOST_URL : string = `https://api.themoviedb.org/3/movie`;
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlOGU3NDE4ZDBjOTAyYTc4YWNhYWJhYzQ2ZWNjOTc5ZSIsInN1YiI6IjYzOTRhOTlhNmU5MzhhMDA5ZjVhN2NlOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.xbOkRnX5HrLukZ6ne0DioRGL4R29m-kldLHsTfpqZ_g',
-    },
-  };
 
-const response = await fetch( HOST_URL + endpoint + `?page=${pageNumber}`,
-options);
-
-if (!response.ok) {
-  throw new Error(`HTTP error! Status: ${response.status}`);
-}
-
-const data = await response.json();
-console.log(data.results)
-return data.results as T[];
-}
 
 async function displayMovies(movies: IMovie[]) {
 try {
@@ -393,21 +416,46 @@ console.log(error)
 
 // load more
 const loadMoreButton = document.getElementById('loadmore') as HTMLButtonElement;
-console.log('button')
 loadMoreButton.addEventListener('click', loadMore)
 async function loadMore() {
   console.log('load more');
-  loadMoreButton.value = (Number(loadMoreButton.value) + 1).toString();
-  let nextPage = await fetchData<IMovie>('/top_rated', Number(loadMoreButton.value));
-  console.log(nextPage);
-  // movies.push(...nextPage);
-  displayMovies(nextPage);
+  const urlParams = new URLSearchParams(window.location.search);
+  let page: number = Number(urlParams.get('page'));
+  if (page === 0) {
+    page = 1;
+  }
+  console.log(page+1)
+  urlParams.set('page', (page+1).toString());
+  saveMoviesToLocalStorage(movies);
+  window.location.search = urlParams.toString();
 }
 
 
 async function main() : Promise<void> {
-  movies = await fetchData<IMovie>('/top_rated', 1);
-console.log('getMovie', movies);
+  const urlParams = new URLSearchParams(window.location.search);
+  let HOST_URL: string;
+  let page: number = Number(urlParams.get('page'));
+  if (page === 0) {
+    page = 1;
+  }
+  movies = JSON.parse(localStorage.getItem('movies') || '[]');
+  let mode: string = urlParams.get('mode') ?? 'popular';
+  switch (mode) {
+    case 'popular':
+      HOST_URL = `https://api.themoviedb.org/3/discover/movie`;
+
+      movies.push(...await fetchData<IMovie>(HOST_URL, page));
+      break;
+      case 'top':
+        HOST_URL = `https://api.themoviedb.org/3/movie`;
+        movies.push(...await fetchData<IMovie>(HOST_URL + '/top_rated', page));
+        break;
+        case 'upcoming':
+          HOST_URL = `https://api.themoviedb.org/3/movie`;
+          movies.push(...await fetchData<IMovie>(HOST_URL + '/upcoming', page));
+          break;
+
+  }
 displayMovies(movies);
 }
 
