@@ -6,22 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Web site created using create-snowpack-app" />
     <link rel="stylesheet" type="text/css" href="/index.css" />
-    <title>Snowpack App</title>
-  </head>
-  <body>
-    <img id="img" src="/logo.svg" />
-    <canvas id="canvas"></canvas>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <title>Movie app</title>
     <script type="module" src="/dist/index.js"></script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  </head>
+  <header>
+    <a href="./index.html" >
+      <img src="./assets/movie-svgrepo-com.svg" width="50" height="50"/>
+    </a>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div>
+      <ul>
+        <li>Popular</li>
+        <li>Upcoming</li>
+        <li>Top rated</li>
+      </ul>
+      </div>
+      <div>
+      <input id="input" name="search" placeholder="Search here"/>
+      <button id="button" type="button">Search</button>
+    </div>
+  </header>
+  <body>
+    <div id = "content">
+    </div>
+    <button  id="loadmore" type="button" value="1">Load more</button>
   </body>
 </html>
