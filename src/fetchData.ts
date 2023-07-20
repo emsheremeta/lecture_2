@@ -13,12 +13,12 @@ export async function fetchData<T>(endpoint: string, pageNumber: number): Promis
   
   const response = await fetch(HOST_URL + endpoint + `?page=${pageNumber}`,
   options);
-  
+
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
   
   const data = await response.json();
-  console.log(data.results)
+  (data.results)
   return data.results as T[];
   }
