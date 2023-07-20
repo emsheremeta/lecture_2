@@ -14,3 +14,85 @@ img {
   height: 250px;
 }
 
+.menu_list {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 20%;
+  left: 43%;
+}
+.menu_items {
+  margin-right: 15px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.menu_items:hover,
+.menu_items:focus {
+  color: brown;
+}
+#input {
+  width: 250px;
+  height: 30px;
+  padding: 5px;
+}
+.search_input {
+  position: absolute;
+  top: 25%;
+  left: 42%;
+}
+.search_btn {
+  height: 30px;
+  padding: 5px;
+}
+.search_btn:hover,
+.search_btn:focus {
+  background-color: beige ;
+}
+.movie_list {    
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
+margin-left: 20px;
+}
+.load_more_btn {
+  padding: 15px;
+  border-color: black;
+  position: absolute;
+  left :50%;
+  margin-top: 20px;
+}
+.load_more_btn :hover,
+.load_more_btn:focus {
+  color: brown;
+}
+
+.movie_title {
+  font-size: large;
+  font-weight: 300;
+}
+.movie_overview {
+  font-size: small;
+  margin-bottom: 5px;
+}
+.movie_release {
+  font-size: small;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.movie_voteAvarage {
+  font-size: small;
+  font-weight: 400;
+  margin-bottom: 5px;
+  background-color: beige;
+  border-radius: 50%;
+  width: 32px;
+  height: 27px;
+  text-align: center;
+  padding: 5px;
+}
+.fav_btn {
+  cursor: pointer;
+  padding: 7px;
+
+}

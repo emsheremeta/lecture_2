@@ -1,4 +1,7 @@
+
+
 export async function fetchData<T>(endpoint: string, pageNumber: number): Promise<T[]> {
+  const HOST_URL: string = 'https://api.themoviedb.org/3/movie';
     const options = {
       method: 'GET',
       headers: {
@@ -8,7 +11,7 @@ export async function fetchData<T>(endpoint: string, pageNumber: number): Promis
       },
     };
   
-  const response = await fetch(endpoint + `?page=${pageNumber}`,
+  const response = await fetch(HOST_URL + endpoint + `?page=${pageNumber}`,
   options);
   
   if (!response.ok) {
